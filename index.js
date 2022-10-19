@@ -1,78 +1,56 @@
-const choices = ["rock", "paper", "scissors"];
-const winners = [];
+let playerScore = 0;
+let computerScore = 0;
+const buttons = document.querySelectorAll('input')
 
-function game(){
-    for(let i = 1; i <= 5; i++) {
-        playRound(i);
-    }
-    document.querySelector("button").textContent = "Play new game";
-    logWins();
+function cpuChoice() {
+    let array =['scissors', 'paper', 'rock'];
+    return array[Math.floor(Math.random() * array.length)]
 }
 
-function playerChoice(){
-    let input = prompt("Type Rock, Paper or Scissors: ");
-    while (input == null) {
-        input = prompt("Type only one of this choices \"Rock, Paper or Scissors\"");
-    }
-    input = input.toLowerCase();
-    let check = validateInput(input);
+function disable() {
+    buttons.forEach(elem => {
+        elem.disabled = true
+    })
+}
 
-    while (check == false) {
-        input = prompt("Type only one of this choices \"Rock, Paper or Scissors\"");
-        while(input == null) {
-            input = prompt("Type only one of this choices \"Rock, Paper or Scissors\"");
+function playRound(playerSelection) {
+    let computerSelection = cpuChoice()
+    let result = ""
+
+    if ((playerSelection == 'rock' && computerSelection == 'scissors') ||
+        (playerSelection == 'scissors' && computerSelection == 'paper') ||
+        (playerSelection == 'paper' && computerSelection == 'rock')) {
+        
+        playerScore += 1
+        result = ('You win! ' + playerSelection + ' beats ' + computerSelection
+            + "<br><br>Player score: " + playerScore + "<br>Computer score: " + computerScore)
+
+        if (playerScore == 5) {
+            result += '<br><br>You won the game! Reload the page to play again'
+            disable()
         }
-        input = input.toLowerCase();
-        check = validateInput(input);
     }
-    return input;
-} // finished
-
-
-function validateInput(choice) {
-    return choices.includes(choice);
-} // finished
-
-function cpuChoice(){
-      return choices[Math.floor(Math.random() * choices.length)];
-} // finished
-
-function playRound(round){
-    const playerSelection = playerChoice();
-    const cpuSelection = cpuChoice();
-    const winner = checkWinner(playerSelection, cpuSelection);
-    winners.push(winner);
-    logRound(playerSelection, cpuSelection, winner, round);
-}
-
-function checkWinner(choiceP, choiceC){
-    if(choiceP === choiceC) {
-        return "Tie!"
-    } else if (
-        (choiceC === "rock" && choiceP == "scissors") ||
-        (choiceC === "paper" && choiceP == "rock") ||
-        (choiceC === "scissors" && choiceP == "paper") ){
-        return "Computer"; 
-    } else {
-        return "Player";
+    else if (playerSelection == computerSelection) {
+        result = ('It\'s a tie. You both chose ' + playerSelection
+            + "<br><br>Player score: " + playerScore + "<br>Computer score: " + computerScore)
     }
+    else {
+        computerScore += 1
+        result = ('You lose! ' + computerSelection + ' beats ' + playerSelection
+            + "<br><br>Player score: " + playerScore + "<br>Computer score: " + computerScore)
+
+        if (computerScore == 5) {
+            result += '<br><br>I won the game! Reload the page to play again'
+            disable()
+        }
+    }
+
+    document.getElementById('result').innerHTML = result
+    return
 }
 
-function logWins() {
-    let playerWins = winners.filter((item) => item == "Player").length;
-    let computerWins = winners.filter((item) => item == "Computer").length;
-    let ties = winners.filter((item) => item == "Tie!").length;
-    console.log("Results:");
-    console.log("Player Wins:", playerWins);
-    console.log("Computer Wins:", computerWins);
-    console.log("Ties", ties);
-}
-
-function logRound(playerSelection, cpuSelection, winner, round) {
-    console.log("Round:", round);
-    console.log("Player chose:", playerSelection);
-    console.log("Computer chose:", cpuSelection);
-    console.log(winner, "Won!");
-    console.log("-----Another game-----");
-}
-
+buttons.forEach(button =>{
+    button.addEventListener('click', function(){
+        playRound(button.value)
+    })
+})
