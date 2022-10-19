@@ -3,7 +3,7 @@
     <head>
         <title>Rock and Paper</title>
         <link rel="stylesheet" href="settings.css">
-        <script src="index.js"></script>
+        <script src="index.js" defer></script>
     </head>
     <body>
        <div class="content">
@@ -14,11 +14,12 @@
                  chose Rock, he beat you, if you chose Scissors and he chose  Paper you beat him, 
                  in case you and him chose the same element is tied.
                Have fun!!</p>
-            <div class="buton">
-                <button onclick="game()">Start Game</button>
-            </div>
-        <p>To start game, you need to open <strong>Console</strong>. </p>
-        <p>If don't know how to open console press <strong>CTRL Shift J</strong></p>
+               <div class="buttons">
+                   <input class="button" type="button" value="rock"></input>
+                   <input class="button" type="button" value="paper"></input>
+                   <input class="button"  type="button" value="scissors"></input>
+               </div>
+               <div id="result"></div>
        </div>
 
     </body>
